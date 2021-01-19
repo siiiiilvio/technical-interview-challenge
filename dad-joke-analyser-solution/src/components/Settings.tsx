@@ -1,60 +1,28 @@
-import React, { useState } from "react";
-import { computeTFIDF } from "../utils/computeTFIDF";
-
+import React from "react";
 interface Props {
-  setJokes: React.Dispatch<React.SetStateAction<any[]>>;
-  setTerms: React.Dispatch<React.SetStateAction<string[][]>>;
+  settings: { jokes: number; terms: number };
+  updateSettings: (value: number, name: string) => void;
+  fetchJokes: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
-const Settings: React.FC<Props> = ({ setJokes, setTerms }) => {
-  const API_RETRIES = 5;
-  const ENDPOINT = "https://icanhazdadjoke.com/";
-  const HEADERS = {
-    headers: {
-      Accept: "application/json",
-      "User-Agent": "Technical Interview Challenge using icanhazdadjoke",
-    },
-  };
-
-  const [state, setState] = useState({ jokes: 0, terms: 0 });
-
-  const updateSettings = (value: number, key: string) => {
-    setState((prevState) => ({ ...prevState, [key]: value }));
-  };
-
-  const fetchJokes = async (
-    e: React.FormEvent<HTMLFormElement>,
-    retries: number
-  ) => {
-    e.preventDefault();
-
-    if (state.jokes > 0) {
-      let promises = [];
-      for (let i = 1; i <= state.jokes; i++) {
-        let response = fetch(ENDPOINT, HEADERS).then((value) => value.json());
-        promises.push(response);
-      }
-
-      const resolved = await Promise.all(promises).catch((error) => {
-        fetchJokes(e, retries - 1);
-        console.error(error.message);
-      });
-
-      if (resolved) {
-        setTerms(computeTFIDF(resolved, state.terms, setJokes));
-      }
-    }
-  };
-
+const Settings: React.FC<Props> = ({
+  settings,
+  updateSettings,
+  fetchJokes,
+}) => {
   return (
     <section className="settings">
-      <form onSubmit={(e) => fetchJokes(e, API_RETRIES)}>
+      <form
+        onSubmit={(e) => {
+          fetchJokes(e);
+        }}
+      >
         <label>
           Choose number of jokes:
           <input
             name="jokes"
             type="number"
-            value={state.jokes}
+            value={settings.jokes}
             onChange={(e) =>
               updateSettings(parseInt(e.target.value), e.target.name)
             }
@@ -65,7 +33,7 @@ const Settings: React.FC<Props> = ({ setJokes, setTerms }) => {
           <input
             name="terms"
             type="number"
-            value={state.terms}
+            value={settings.terms}
             onChange={(e) =>
               updateSettings(parseInt(e.target.value), e.target.name)
             }

@@ -11,20 +11,18 @@ const List: React.FC<Props> = ({ jokes, terms }) => {
       <ul>
         {jokes &&
           jokes.map((joke, index) => (
-            <>
-              <li key={joke.id} className="list-group-item">
-                {joke.joke}
-                <br />
-                {terms[index]?.map((term: string, idx: number) => (
-                  <button
-                    key={`${term}_${index.toString()}`}
-                    className="btn btn-info"
-                  >
-                    {term}
-                  </button>
-                ))}
-              </li>
-            </>
+            <li key={joke.id} className="list-group-item">
+              {joke.joke}
+              <br />
+              {terms[index]?.map((term: string, idx: number) => (
+                <button
+                  key={`${term}_${index.toString()}`}
+                  className="btn btn-info"
+                >
+                  {term}
+                </button>
+              ))}
+            </li>
           ))}
       </ul>
     </section>

@@ -10,6 +10,7 @@ const buildDataStructure = (array: any[], callback: any) => {
     return isUnique && item;
   });
 
+  console.log("uniqueJokes: ", uniqueJokes);
   callback(uniqueJokes);
   return dataStructure;
 };
