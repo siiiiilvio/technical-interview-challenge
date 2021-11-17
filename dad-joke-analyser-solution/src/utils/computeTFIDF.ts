@@ -10,7 +10,6 @@ const buildDataStructure = (array: any[], callback: any) => {
     return isUnique && item;
   });
 
-  console.log("uniqueJokes: ", uniqueJokes);
   callback(uniqueJokes);
   return dataStructure;
 };
@@ -50,10 +49,9 @@ export const computeTFIDF = (array: any[], terms: number, callback: any) => {
     Object.keys(dataStructure).forEach((key) => {
       const wordsArray = dataStructure[key]["wordsArray"];
       wordsArray?.forEach((word: string, index: number) => {
-        const numberOfTimes = key.split(word).length - 1;
+        const numberOfTimes = (key.match(word) || []).length;
         dataStructure[key]["words"][word] =
-          (numberOfTimes / wordsArray.length) *
-          getIDF(word, array.length, dataStructure);
+          numberOfTimes * getIDF(word, array.length, dataStructure);
       });
 
       const sorted = Object.entries(dataStructure[key]["words"])

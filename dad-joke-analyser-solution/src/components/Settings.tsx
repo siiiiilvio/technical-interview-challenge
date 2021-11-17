@@ -28,17 +28,6 @@ const Settings: React.FC<Props> = ({
             }
           />
         </label>
-        <label>
-          Choose number of popular terms:
-          <input
-            name="terms"
-            type="number"
-            value={settings.terms}
-            onChange={(e) =>
-              updateSettings(parseInt(e.target.value), e.target.name)
-            }
-          />
-        </label>
         <button>
           <img src="../../logo.png" alt="logo" />
         </button>
